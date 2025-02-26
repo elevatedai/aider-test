@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_browser/features/file_browser/data/models/file_item.dart';
 import 'package:file_browser/features/file_browser/presentation/providers/file_browser_provider.dart';
 import 'package:file_browser/features/file_browser/presentation/screens/preview/image_preview.dart';

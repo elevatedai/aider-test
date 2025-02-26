@@ -55,10 +55,6 @@ class _AddConnectionScreenState extends ConsumerState<AddConnectionScreen> {
     switch (type) {
       case ConnectionType.webdav:
         return '443';
-      case ConnectionType.ftp:
-        return '21';
-      case ConnectionType.ftps:
-        return '21';
       case ConnectionType.local:
         return '';
     }
@@ -114,14 +110,6 @@ class _AddConnectionScreenState extends ConsumerState<AddConnectionScreen> {
         DropdownMenuItem(
           value: ConnectionType.webdav,
           child: Text('WebDAV'),
-        ),
-        DropdownMenuItem(
-          value: ConnectionType.ftp,
-          child: Text('FTP'),
-        ),
-        DropdownMenuItem(
-          value: ConnectionType.ftps,
-          child: Text('FTPS (Secure)'),
         ),
         DropdownMenuItem(
           value: ConnectionType.local,

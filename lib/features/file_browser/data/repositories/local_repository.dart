@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_browser/features/file_browser/data/models/file_item.dart';
 import 'package:file_browser/features/file_browser/domain/repositories/file_repository.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as filepath;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
@@ -62,7 +62,7 @@ class LocalRepository implements FileRepository {
     }
     
     String formattedPath = relativePath.startsWith('/') ? relativePath.substring(1) : relativePath;
-    return path.join(_rootPath!, formattedPath);
+    return filepath.join(_rootPath!, formattedPath);
   }
 
   String _getRelativePath(String absolutePath) {
@@ -70,7 +70,7 @@ class LocalRepository implements FileRepository {
       return '/';
     }
     
-    final relative = path.relative(absolutePath, from: _rootPath!);
+    final relative = filepath.relative(absolutePath, from: _rootPath!);
     return '/$relative';
   }
 
@@ -170,7 +170,7 @@ class LocalRepository implements FileRepository {
     final fileSystemEntity = isDirectory ? directory : file;
     
     final stat = await fileSystemEntity.stat();
-    final name = path.basename(absolutePath);
+    final name = filepath.basename(absolutePath);
     
     return FileItem(
       id: path,
@@ -236,7 +236,7 @@ class LocalRepository implements FileRepository {
       
       for (final entity in entities) {
         final relativePath = _getRelativePath(entity.path);
-        final name = path.basename(entity.path);
+        final name = filepath.basename(entity.path);
         final isDirectory = entity is Directory;
         
         final stat = await entity.stat();
@@ -302,8 +302,8 @@ class LocalRepository implements FileRepository {
   Future<bool> renameFile(String path, String newName) async {
     try {
       final absolutePath = _getAbsolutePath(path);
-      final directory = path.dirname(absolutePath);
-      final newPath = path.join(directory, newName);
+      final directory = filepath.dirname(absolutePath);
+      final newPath = filepath.join(directory, newName);
       
       final oldFile = File(absolutePath);
       await oldFile.rename(newPath);
@@ -332,7 +332,7 @@ class LocalRepository implements FileRepository {
       final entities = await directory.list().toList();
       
       for (final entity in entities) {
-        final name = path.basename(entity.path);
+        final name = filepath.basename(entity.path);
         final relativePath = _getRelativePath(entity.path);
         final isDirectory = entity is Directory;
         
@@ -425,5 +425,11 @@ class LocalRepository implements FileRepository {
   Future<bool> cancelTransfer(String path) async {
     // Not directly supported in the File API
     return false;
+  }
+  
+  @override
+  Future<bool> initializeConnection() {
+    // TODO: implement initializeConnection
+    throw UnimplementedError();
   }
 }

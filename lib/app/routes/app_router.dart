@@ -1,11 +1,9 @@
 import 'package:file_browser/app/app.dart';
 import 'package:file_browser/features/file_browser/presentation/screens/file_browser_screen.dart';
 import 'package:file_browser/features/connections/presentation/screens/connections_screen.dart';
-import 'package:file_browser/features/search/presentation/screens/search_screen.dart';
 import 'package:file_browser/features/settings/presentation/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:file_browser/app/compliance/compliance_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -30,26 +28,12 @@ final appRouter = GoRouter(
           ),
         ),
         GoRoute(
-          path: '/search',
-          pageBuilder: (context, state) => NoTransitionPage(
-            key: state.pageKey,
-            child: const SearchScreen(),
-          ),
-        ),
-        GoRoute(
           path: '/settings',
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
             child: const SettingsScreen(),
           ),
-        ),
-                GoRoute(
-          path: '/compliance',
-          pageBuilder: (context, state) => NoTransitionPage(
-            key: state.pageKey,
-            child: const ComplianceScreen(),
-          ),
-        ),
+        )
       ],
     ),
     GoRoute(

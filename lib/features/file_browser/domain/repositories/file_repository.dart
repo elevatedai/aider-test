@@ -1,11 +1,36 @@
-import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:file_browser/core/services/logger_service.dart';
 import 'package:file_browser/features/file_browser/data/models/file_item.dart';
+
+class FileOperationException implements Exception {
+  final String message;
+  final dynamic originalError;
+
+  FileOperationException(this.message, [this.originalError]);
+
+  @override
+  String toString() => 'FileOperationException: $message${originalError != null ? '\nOriginal error: $originalError' : ''}';
+}
 
 abstract class FileRepository {
   /// Connection methods
-  Future<bool> connect();
+  Future<bool> connect() async {
+    if (isConnected) {
+      LoggerService.debug('Already connected');
+      return true;
+    }
+    try {
+      final result = await initializeConnection();
+      LoggerService.info('Connection ${result ? 'successful' : 'failed'}');
+      return result;
+    } catch (e) {
+      LoggerService.error('Connection failed', e);
+      throw FileOperationException('Failed to connect', e);
+    }
+  }
+  
+  /// Implement this method to handle actual connection logic
+  Future<bool> initializeConnection();
   Future<void> disconnect();
   bool get isConnected;
   

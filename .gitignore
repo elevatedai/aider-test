@@ -1,1 +1,4 @@
 .aider*
+.flutter*
+.dart_tool/
+.packages

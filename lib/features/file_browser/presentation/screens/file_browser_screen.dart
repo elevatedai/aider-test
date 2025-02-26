@@ -1,4 +1,3 @@
-import 'package:file_browser/features/file_browser/data/models/file_item.dart';
 import 'package:file_browser/features/file_browser/presentation/providers/file_browser_provider.dart';
 import 'package:file_browser/features/file_browser/presentation/widgets/file_grid_view.dart';
 import 'package:file_browser/features/file_browser/presentation/widgets/file_list_view.dart';

@@ -1,5 +1,4 @@
 import 'package:file_browser/features/connections/data/models/connection_model.dart';
-import 'package:file_browser/features/file_browser/data/repositories/ftp_repository.dart';
 import 'package:file_browser/features/file_browser/data/repositories/local_repository.dart';
 import 'package:file_browser/features/file_browser/data/repositories/webdav_repository.dart';
 import 'package:file_browser/features/file_browser/domain/repositories/file_repository.dart';
@@ -32,22 +31,6 @@ final currentRepositoryProvider = Provider<FileRepository>((ref) {
         baseUrl: activeConnection.host,
         username: activeConnection.username,
         password: activeConnection.password,
-      );
-    case ConnectionType.ftp:
-      return FtpRepository(
-        host: activeConnection.host,
-        port: activeConnection.port ?? 21,
-        username: activeConnection.username,
-        password: activeConnection.password,
-        useFtps: false,
-      );
-    case ConnectionType.ftps:
-      return FtpRepository(
-        host: activeConnection.host,
-        port: activeConnection.port ?? 21,
-        username: activeConnection.username,
-        password: activeConnection.password,
-        useFtps: true,
       );
     case ConnectionType.local:
       return LocalRepository();
@@ -167,34 +150,25 @@ class ConnectionsNotifier extends StateNotifier<List<ConnectionModel>> {
   
   Future<bool> connectTo(String connectionId) async {
     try {
-      final connection = state.firstWhere((conn) => conn.id == connectionId);
+      final connection = state.firstWhere(
+        (conn) => conn.id == connectionId,
+        orElse: () => throw FileOperationException('Connection not found'),
+      );
       
       FileRepository repository;
       
       switch (connection.type) {
         case ConnectionType.webdav:
+          if (!connection.host.startsWith('http://') && !connection.host.startsWith('https://')) {
+            throw FileOperationException('WebDAV URL must start with http:// or https://');
+          }
+          if (connection.host.isEmpty) {
+            throw FileOperationException('Host cannot be empty');
+          }
           repository = WebDavRepository(
             baseUrl: connection.host,
             username: connection.username,
             password: connection.password,
-          );
-          break;
-        case ConnectionType.ftp:
-          repository = FtpRepository(
-            host: connection.host,
-            port: connection.port ?? 21,
-            username: connection.username,
-            password: connection.password,
-            useFtps: false,
-          );
-          break;
-        case ConnectionType.ftps:
-          repository = FtpRepository(
-            host: connection.host,
-            port: connection.port ?? 21,
-            username: connection.username,
-            password: connection.password,
-            useFtps: true,
           );
           break;
         case ConnectionType.local:
@@ -205,15 +179,15 @@ class ConnectionsNotifier extends StateNotifier<List<ConnectionModel>> {
       final connected = await repository.connect();
       
       if (connected) {
-        // Update the active connection provider
         container.read(activeConnectionProvider.notifier).state = connectionId;
         return true;
       }
       
       return false;
+    } on FileOperationException catch (e) {
+      rethrow;
     } catch (e) {
-      debugPrint('Connection error: $e');
-      return false;
+      throw FileOperationException('Failed to establish connection', e);
     }
   }
   

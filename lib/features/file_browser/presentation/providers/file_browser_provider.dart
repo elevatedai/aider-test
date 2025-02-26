@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_browser/features/file_browser/data/models/file_item.dart';
 import 'package:file_browser/features/file_browser/domain/repositories/file_repository.dart';
 import 'package:file_browser/features/settings/presentation/providers/settings_provider.dart';
@@ -429,6 +431,12 @@ class MockFileRepository implements FileRepository {
 
   @override
   Future<bool> cancelTransfer(String path) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> initializeConnection() {
+    // TODO: implement initializeConnection
     throw UnimplementedError();
   }
 }

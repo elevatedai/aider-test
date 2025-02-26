@@ -179,7 +179,7 @@ class _FileListItem extends StatelessWidget {
   final VoidCallback onLongPress;
   final dateFormat = DateFormat('MMM d, yyyy • h:mm a');
 
-  const _FileListItem({
+  _FileListItem({
     required this.file,
     required this.isSelected,
     required this.multiSelectMode,

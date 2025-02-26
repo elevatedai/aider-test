@@ -19,7 +19,7 @@ class ImagePreview extends StatelessWidget {
       minScale: PhotoViewComputedScale.contained,
       maxScale: PhotoViewComputedScale.covered * 2.0,
       backgroundDecoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
       ),
       loadingBuilder: (context, event) => Center(
         child: CircularProgressIndicator(

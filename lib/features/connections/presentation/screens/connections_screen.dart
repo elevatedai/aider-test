@@ -90,10 +90,6 @@ class ConnectionsScreen extends ConsumerWidget {
     switch (type) {
       case ConnectionType.webdav:
         return Icons.cloud;
-      case ConnectionType.ftp:
-        return Icons.folder_shared;
-      case ConnectionType.ftps:
-        return Icons.security;
       case ConnectionType.local:
         return Icons.phone_android;
     }
